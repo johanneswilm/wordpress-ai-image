@@ -1,0 +1,28 @@
+# Copyright (C) 2024 AI Image Marker
+# This file is distributed under the same license as the AI Image Marker plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: AI Image Marker 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ai-image-marker\n"
+"POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+msgid "AI Generated"
+msgstr ""
+
+msgid "This image was generated with artificial intelligence"
+msgstr ""
+
+msgid "Check this box if the image was created using AI tools"
+msgstr ""
+
+msgid "Mark images that were created with AI"
+msgstr ""
+
+msgid "Generated with artificial intelligence"
+msgstr ""
