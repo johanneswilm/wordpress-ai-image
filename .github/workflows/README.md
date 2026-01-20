@@ -25,7 +25,7 @@ git push origin v1.0.0
 
 # GitHub will automatically:
 # 1. Build the plugin
-# 2. Create a release
+# 2. Create a release using GitHub CLI
 # 3. Attach ai-image-marker-1.0.0.zip
 ```
 
@@ -118,9 +118,13 @@ No additional secrets needed! Workflows use the built-in `GITHUB_TOKEN`.
 
 ### Permissions
 
-Default repository permissions are sufficient:
-- Contents: read/write
-- Actions: read/write
+The release workflow requires explicit permissions:
+```yaml
+permissions:
+  contents: write  # Required for creating releases
+```
+
+This is defined in the workflow file.
 
 ### Dependencies
 
@@ -162,11 +166,16 @@ Build status badges can be added to README.md:
 - Tag format: Must be `v*` (e.g., `v1.0.0`, not `1.0.0`)
 - Tag pushed to remote: `git push origin v1.0.0`
 - Workflow triggered: Check Actions tab
+- Permissions: Workflow has `contents: write` permission
 
 **Common issues**:
 - Forgot to push tag
 - Wrong tag format
-- Permissions issue
+- Permissions issue (fixed in workflow with explicit permissions)
+
+**If "Resource not accessible by integration" error**:
+- This was fixed by using GitHub CLI instead of deprecated actions
+- Make sure workflow has `permissions: contents: write`
 
 ### Translation Not Compiled
 
@@ -262,6 +271,23 @@ For WordPress.org plugin repository, add a workflow that:
 2. Checks out WordPress.org SVN
 3. Commits to SVN trunk
 4. Tags release in SVN
+
+## Recent Fixes
+
+### GitHub Actions v1.0.1 Update
+
+**Issue**: The original workflow used deprecated actions (`actions/create-release@v1` and `actions/upload-release-asset@v1`) which caused permission errors.
+
+**Fix**: Updated to use GitHub CLI (`gh release create`) which is:
+- Actively maintained
+- Works with modern GitHub permissions
+- Simpler (one command instead of two actions)
+- More reliable
+
+**Changes**:
+- Replaced `actions/create-release@v1` with `gh release create`
+- Added explicit `permissions: contents: write`
+- Combined release creation and asset upload in single step
 
 ## Resources
 

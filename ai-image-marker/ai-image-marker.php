@@ -3,7 +3,7 @@
  * Plugin Name: AI Image Marker
  * Plugin URI: https://github.com/johanneswilm/ai-image-marker
  * Description: Mark images in the media library as AI-generated and display this information on the frontend
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Johannes Wilm
  * Author URI: https://www.johanneswilm.org
  * Text Domain: ai-image-marker
@@ -27,7 +27,7 @@ class AI_Image_Marker {
     /**
      * Plugin version
      */
-    const VERSION = '1.0.1';
+    const VERSION = '1.0.2';
 
     /**
      * Instance of this class

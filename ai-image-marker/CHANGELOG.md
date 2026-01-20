@@ -7,6 +7,21 @@ This is the single changelog for both the plugin and the repository.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-01-20
+
+### Repository - Fixed
+- GitHub Actions release workflow updated to use GitHub CLI instead of deprecated actions
+- Added explicit `permissions: contents: write` to workflow
+- Fixed "Resource not accessible by integration" error
+- Simplified release creation to single command
+
+### Repository - Changed
+- Updated `.gitignore` to properly ignore ZIP files in release/ directory
+- Removed build artifacts from Git tracking
+- Updated workflow documentation
+
+---
+
 ## [1.0.1] - 2025-01-20
 
 ### Plugin - Added
@@ -144,12 +159,16 @@ make help
 
 ## Version History
 
+- **1.0.2** - GitHub Actions workflow fixes (January 2025)
 - **1.0.1** - Block Editor support, featured images, improved styling (January 2025)
 - **1.0.0** - Initial public release (January 2025)
 
 ---
 
 ## Upgrade Notice
+
+### 1.0.2
+Fixes GitHub Actions release workflow. Uses modern GitHub CLI for creating releases. No functional changes to the plugin itself.
 
 ### 1.0.1
 Adds Block Editor support, featured image notices, and improved styling. All AI-marked images now display notices in Block Editor, Classic Editor, and as featured images on single post/page views.
