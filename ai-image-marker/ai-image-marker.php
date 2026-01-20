@@ -3,7 +3,7 @@
  * Plugin Name: AI Image Marker
  * Plugin URI: https://github.com/johanneswilm/ai-image-marker
  * Description: Mark images in the media library as AI-generated and display this information on the frontend
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Johannes Wilm
  * Author URI: https://www.johanneswilm.org
  * Text Domain: ai-image-marker
@@ -27,7 +27,7 @@ class AI_Image_Marker {
     /**
      * Plugin version
      */
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.1';
 
     /**
      * Instance of this class
@@ -55,6 +55,7 @@ class AI_Image_Marker {
         add_filter('wp_get_attachment_image_attributes', array($this, 'add_ai_image_attributes'), 10, 3);
         add_filter('img_caption_shortcode', array($this, 'modify_image_caption'), 10, 3);
         add_filter('render_block', array($this, 'modify_image_block'), 10, 2);
+        add_filter('post_thumbnail_html', array($this, 'add_featured_image_notice'), 10, 5);
         add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_styles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
 
@@ -331,6 +332,34 @@ class AI_Image_Marker {
     }
 
     /**
+     * Add AI notice to featured images on single post/page views
+     */
+    public function add_featured_image_notice($html, $post_id, $post_thumbnail_id, $size, $attr) {
+        // Only add notice on single post/page views
+        if (!is_singular()) {
+            return $html;
+        }
+
+        // Check if the featured image is AI-generated
+        $is_ai = get_post_meta($post_thumbnail_id, self::META_KEY, true);
+
+        if (!$is_ai) {
+            return $html;
+        }
+
+        // Create the AI notice
+        $ai_notice = '<p class="ai-generated-notice featured-image-notice">' . esc_html__('Generated with artificial intelligence', 'ai-image-marker') . '</p>';
+
+        // Wrap the image and notice in a container
+        $output = '<div class="featured-image-container ai-generated-featured">';
+        $output .= $html;
+        $output .= $ai_notice;
+        $output .= '</div>';
+
+        return $output;
+    }
+
+    /**
      * Enqueue frontend styles
      */
     public function enqueue_frontend_styles() {
@@ -385,6 +414,31 @@ class AI_Image_Marker {
             float: right;
             clear: right;
         }
+
+        /* Featured image AI notice styling */
+        .featured-image-container {
+            margin-bottom: 1.5em;
+        }
+
+        /*.featured-image-container.ai-generated-featured {
+            border-left: 3px solid #e0e0e0;
+            padding-left: 12px;
+        }*/
+
+        .featured-image-notice {
+            float: right;
+            clear: right;
+            margin: 8px 0 0 12px;
+            text-align: right;
+            font-size: 0.9em;
+            font-style: italic;
+            color: #666;
+        }
+
+        /*.featured-image-notice::before {
+            content: '🤖 ';
+            margin-right: 4px;
+        }*/
         ";
 
         wp_add_inline_style('wp-block-library', $css);

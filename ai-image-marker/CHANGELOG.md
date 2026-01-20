@@ -7,7 +7,12 @@ This is the single changelog for both the plugin and the repository.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-01-20
+## [1.0.1] - 2025-01-20
+
+### Plugin - Added
+- Featured image support - AI notices now appear on featured images in single post/page views
+- Featured images display AI notice below the image (only on singular views, not archives)
+- Added `post_thumbnail_html` filter to process featured images
 
 ### Plugin - Fixed
 - Block Editor (Gutenberg) support - AI notices now appear on images inserted via Block Editor
@@ -20,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Notice positioned directly under bottom-right of image
 - Improved styling with proper text flow around the notice
 - Works consistently in both Block Editor and Classic Editor
+
+---
+
+## [1.0.0] - 2025-01-20
 
 ### Plugin - Added
 - Initial release of AI Image Marker WordPress plugin
@@ -135,11 +144,15 @@ make help
 
 ## Version History
 
+- **1.0.1** - Block Editor support, featured images, improved styling (January 2025)
 - **1.0.0** - Initial public release (January 2025)
 
 ---
 
 ## Upgrade Notice
+
+### 1.0.1
+Adds Block Editor support, featured image notices, and improved styling. All AI-marked images now display notices in Block Editor, Classic Editor, and as featured images on single post/page views.
 
 ### 1.0.0
 First release of AI Image Marker. Provides simple marking and display of AI-generated images in WordPress media library. Includes complete build system and development tools.

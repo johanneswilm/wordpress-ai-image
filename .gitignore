@@ -52,8 +52,7 @@ package-lock.json
 # Build artifacts
 dist/
 build/
-*.zip
-!release/*.zip
+release/*.zip
 
 # Environment files
 .env
