@@ -34,6 +34,10 @@ ai-image-marker/               # WordPress plugin (install this folder)
 └── LICENSE                    # GPL v2 License
 
 PROJECT_OVERVIEW.md            # Technical overview (this directory)
+CONTRIBUTING.md                # Development guide
+build.sh                       # Build script for creating ZIP
+Makefile                       # Make commands for development
+.gitignore                     # Git ignore rules
 ```
 
 ## 🚀 Quick Start
@@ -77,6 +81,67 @@ PROJECT_OVERVIEW.md            # Technical overview (this directory)
 3. Save changes
 
 All plugin text automatically switches to Norwegian!
+
+## 🔨 Building the Plugin
+
+### Quick Build
+
+```bash
+# Using the build script (recommended)
+./build.sh
+
+# Or using Make
+make build
+```
+
+This will:
+- Compile all translation files
+- Create a clean copy of plugin files
+- Generate `release/ai-image-marker-{version}.zip`
+- Verify the ZIP contents
+
+### Build Commands
+
+```bash
+# Show available commands
+make help
+
+# Build the plugin ZIP
+make build
+
+# Show current version
+make version
+
+# Verify ZIP contents
+make verify
+
+# Build and show install instructions
+make install
+
+# Clean build artifacts
+make clean
+
+# Compile translations only
+make translations
+
+# Install to local WordPress (for testing)
+make dev-install WP_PATH=/path/to/wordpress
+```
+
+### Manual Build
+
+If you prefer to build manually:
+
+```bash
+# 1. Compile translations
+cd ai-image-marker/languages
+msgfmt ai-image-marker-nb_NO.po -o ai-image-marker-nb_NO.mo
+
+# 2. Create ZIP
+cd ../..
+zip -r ai-image-marker.zip ai-image-marker/ \
+    -x "*.git*" -x "*node_modules*" -x "*.DS_Store"
+```
 
 ### Add More Languages
 
@@ -281,6 +346,8 @@ Common AI image tools that might generate images:
 - **Status**: Production Ready
 - **License**: GPL v2 or later
 
+**Version History**: See [`ai-image-marker/CHANGELOG.md`](ai-image-marker/CHANGELOG.md)
+
 ## 🌟 Benefits
 
 ### For Website Owners
@@ -343,6 +410,69 @@ See the `LICENSE` file for full license text.
 **Need help?** Check `ai-image-marker/INSTALL.md` for detailed instructions.
 
 **Developer?** See `ai-image-marker/EXAMPLES.md` for code samples.
+
+**Contributing?** Read `CONTRIBUTING.md` for development guidelines.
+
+**Version History?** See `ai-image-marker/CHANGELOG.md` for all changes.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
+
+- Development setup instructions
+- Code style guidelines
+- Testing procedures
+- How to submit pull requests
+- Translation guidelines
+
+Quick contribution steps:
+
+```bash
+# 1. Fork and clone the repository
+git clone <your-fork-url>
+cd wordpress-ai-image
+
+# 2. Create a feature branch
+git checkout -b feature/your-feature
+
+# 3. Make changes and test
+make dev-install WP_PATH=/path/to/wordpress
+
+# 4. Build and verify
+make build
+make verify
+
+# 5. Commit and push
+git commit -m "Description of changes"
+git push origin feature/your-feature
+
+# 6. Create a Pull Request
+```
+
+---
+
+## 📦 Repository Structure
+
+```
+.
+├── ai-image-marker/          # WordPress plugin (installable)
+│   ├── *.php, *.js          # Plugin source code
+│   ├── languages/           # Translation files (.pot, .po, .mo)
+│   └── *.md                 # Plugin documentation
+├── release/                 # Built ZIP files (gitignored)
+├── build.sh                 # Automated build script
+├── Makefile                 # Development commands
+├── .gitignore              # Git ignore rules
+├── LICENSE                  # Repository license (GPL v2)
+├── CONTRIBUTING.md         # Contributor guidelines
+├── PROJECT_OVERVIEW.md     # Technical documentation
+├── QUICK_REFERENCE.md      # Command quick reference
+├── FILE_STRUCTURE.md       # File organization explanation
+├── BUILD_SUMMARY.txt       # Build system summary
+└── README.md               # This file
+```
 
 ---
 

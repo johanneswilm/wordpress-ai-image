@@ -1,14 +1,28 @@
 # Changelog
 
-All notable changes to the AI Image Marker plugin will be documented in this file.
+All notable changes to the AI Image Marker project will be documented in this file.
+
+This is the single changelog for both the plugin and the repository.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] - 2025-01-20
 
-### Added
-- Initial release of AI Image Marker plugin
+### Plugin - Fixed
+- Block Editor (Gutenberg) support - AI notices now appear on images inserted via Block Editor
+- AI notices display on images both with and without captions in Block Editor
+- Added `render_block` filter to process `core/image` blocks
+
+### Plugin - Changed
+- AI notice now floats to the right side of captions
+- AI notice appears above/before caption text (not after)
+- Notice positioned directly under bottom-right of image
+- Improved styling with proper text flow around the notice
+- Works consistently in both Block Editor and Classic Editor
+
+### Plugin - Added
+- Initial release of AI Image Marker WordPress plugin
 - Checkbox in media library attachment details to mark images as AI-generated
 - Automatic display of "Generated with artificial intelligence" notice on frontend
 - Custom column in media library list view showing AI-generated status
@@ -36,6 +50,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - PROJECT_OVERVIEW.md - Technical architecture overview
   - CHANGELOG.md - This file
 
+
+### Repository - Added
+- Automated build system with `build.sh` script
+- Makefile with development commands (`make build`, `make verify`, etc.)
+- Comprehensive documentation structure:
+  - Root README.md - Project overview and build instructions
+  - CONTRIBUTING.md - Developer contribution guidelines
+  - PROJECT_OVERVIEW.md - Technical architecture documentation
+  - QUICK_REFERENCE.md - Command quick reference
+  - FILE_STRUCTURE.md - File organization explanation
+  - BUILD_SUMMARY.txt - Build system summary
+- Git repository configuration with `.gitignore`
+- `release/` directory for build outputs
+- Complete Norwegian Bokmål (nb_NO) translation
+- Translation compilation integrated into build process
+
 ### Technical Details
 - Meta key `_ai_generated_image` stores AI-generated flag in postmeta
 - No external dependencies or API calls
@@ -51,7 +81,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Planned Features
+### In Progress
+- Testing Block Editor integration across different themes
+- Feedback on emoji vs text-only AI notices
+
+### Repository Commands
+```bash
+# Build plugin
+./build.sh
+make build
+
+# Development
+make dev-install WP_PATH=/path/to/wordpress
+make translations
+make clean
+make verify
+
+# Information
+make version
+make help
+```
+
+---
+
+## Future Plans
+
+### Plugin Features
 - Bulk actions support in media library
 - Settings page for customizing notice text
 - Optional AI image watermarking
@@ -61,6 +116,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Usage statistics and analytics
 - Export/import AI image lists
 - Custom post type support beyond attachments
+
+
+### Repository Enhancements
+- CI/CD pipeline (GitHub Actions)
+- Automated testing
+- WordPress.org SVN integration
+- Release automation
+- Code quality checks (PHP_CodeSniffer, ESLint)
 
 ---
 
@@ -73,8 +136,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Upgrade Notice
 
 ### 1.0.0
-First release of AI Image Marker. Provides simple marking and display of AI-generated images in WordPress media library.
+First release of AI Image Marker. Provides simple marking and display of AI-generated images in WordPress media library. Includes complete build system and development tools.
 
 ---
 
-**Note**: This plugin stores AI-generated status in WordPress database as post metadata. Uninstalling the plugin will not automatically remove this data, allowing you to preserve your markings if you reinstall later.
+## Notes
+
+### For Plugin Users
+This plugin stores AI-generated status in WordPress database as post metadata. Uninstalling the plugin will not automatically remove this data, allowing you to preserve your markings if you reinstall later.
+
+### For Developers
+This repository uses a two-level structure:
+- Root directory: Development tools and documentation
+- Plugin directory: Distributable WordPress plugin
+
+Build the plugin with `./build.sh` or `make build`.
