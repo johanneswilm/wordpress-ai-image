@@ -54,6 +54,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Repository - Added
 - Automated build system with `build.sh` script
 - Makefile with development commands (`make build`, `make verify`, etc.)
+- GitHub Actions workflows:
+  - `release.yml` - Automatic ZIP creation and GitHub releases on tags
+  - `build-test.yml` - Automated build testing on PRs and pushes
+  - Automatic translation compilation in CI/CD
+  - Build artifact uploads for testing
 - Comprehensive documentation structure:
   - Root README.md - Project overview and build instructions
   - CONTRIBUTING.md - Developer contribution guidelines
@@ -61,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - QUICK_REFERENCE.md - Command quick reference
   - FILE_STRUCTURE.md - File organization explanation
   - BUILD_SUMMARY.txt - Build system summary
+  - `.github/workflows/README.md` - GitHub Actions documentation
 - Git repository configuration with `.gitignore`
 - `release/` directory for build outputs
 - Complete Norwegian Bokmål (nb_NO) translation
