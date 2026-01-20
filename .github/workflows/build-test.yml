@@ -1,0 +1,93 @@
+name: Build Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test-build:
+    name: Test Plugin Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install gettext tools
+        run: sudo apt-get update && sudo apt-get install -y gettext
+      
+      - name: Compile translations
+        run: |
+          cd ai-image-marker/languages
+          if [ -f ai-image-marker-nb_NO.po ]; then
+            msgfmt ai-image-marker-nb_NO.po -o ai-image-marker-nb_NO.mo
+            echo "✓ Norwegian translation compiled"
+          else
+            echo "⚠ No Norwegian translation file found"
+          fi
+      
+      - name: Run build script
+        run: |
+          chmod +x build.sh
+          ./build.sh
+      
+      - name: Verify build output
+        run: |
+          if [ ! -d "release" ]; then
+            echo "❌ Release directory not created"
+            exit 1
+          fi
+          
+          ZIP_FILE=$(ls release/*.zip 2>/dev/null | head -1)
+          if [ -z "$ZIP_FILE" ]; then
+            echo "❌ No ZIP file created"
+            exit 1
+          fi
+          
+          echo "✓ ZIP file created: $ZIP_FILE"
+          
+          # Check ZIP contents
+          echo ""
+          echo "ZIP contents:"
+          unzip -l "$ZIP_FILE"
+          
+          # Verify essential files are present
+          echo ""
+          echo "Verifying essential files..."
+          unzip -l "$ZIP_FILE" | grep -q "ai-image-marker.php" || { echo "❌ Missing ai-image-marker.php"; exit 1; }
+          unzip -l "$ZIP_FILE" | grep -q "admin.js" || { echo "❌ Missing admin.js"; exit 1; }
+          unzip -l "$ZIP_FILE" | grep -q "LICENSE" || { echo "❌ Missing LICENSE"; exit 1; }
+          unzip -l "$ZIP_FILE" | grep -q "README.md" || { echo "❌ Missing README.md"; exit 1; }
+          unzip -l "$ZIP_FILE" | grep -q "CHANGELOG.md" || { echo "❌ Missing CHANGELOG.md"; exit 1; }
+          unzip -l "$ZIP_FILE" | grep -q "languages/.*\.mo" || { echo "❌ Missing compiled translations"; exit 1; }
+          
+          echo "✓ All essential files present"
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-build
+          path: release/*.zip
+          retention-days: 7
+      
+      - name: Summary
+        run: |
+          echo "## Build Test Results ✓" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Build completed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Files Verified" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ ai-image-marker.php" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ admin.js" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ LICENSE" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ README.md" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ CHANGELOG.md" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ Compiled translations" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The plugin ZIP has been uploaded as a build artifact." >> $GITHUB_STEP_SUMMARY

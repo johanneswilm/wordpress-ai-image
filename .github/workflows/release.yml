@@ -1,0 +1,91 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+      - name: Install gettext tools
+        run: sudo apt-get update && sudo apt-get install -y gettext
+      
+      - name: Compile translations
+        run: |
+          cd ai-image-marker/languages
+          if [ -f ai-image-marker-nb_NO.po ]; then
+            msgfmt ai-image-marker-nb_NO.po -o ai-image-marker-nb_NO.mo
+            echo "✓ Norwegian translation compiled"
+          fi
+      
+      - name: Create plugin ZIP
+        run: |
+          mkdir -p release
+          cd ai-image-marker
+          zip -r ../release/ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip . \
+            -x "*.git*" -x "*node_modules*" -x "*.DS_Store"
+          cd ..
+          echo "✓ ZIP created: release/ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip"
+      
+      - name: Verify ZIP contents
+        run: |
+          echo "Contents of ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip:"
+          unzip -l release/ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: AI Image Marker v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## AI Image Marker v${{ steps.get_version.outputs.VERSION }}
+            
+            WordPress plugin for marking and displaying AI-generated images.
+            
+            ### Installation
+            1. Download `ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip`
+            2. Upload to WordPress via Plugins → Add New → Upload
+            3. Activate the plugin
+            
+            ### What's Changed
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/ai-image-marker/CHANGELOG.md) for details.
+            
+            ---
+            
+            **Full Changelog**: https://github.com/${{ github.repository }}/blob/main/ai-image-marker/CHANGELOG.md
+          draft: false
+          prerelease: false
+      
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip
+          asset_name: ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip
+          asset_content_type: application/zip
+      
+      - name: Summary
+        run: |
+          echo "## Release Created! 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: ${{ steps.get_version.outputs.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**ZIP File**: ai-image-marker-${{ steps.get_version.outputs.VERSION }}.zip" >> $GITHUB_STEP_SUMMARY
+          echo "**Release URL**: ${{ steps.create_release.outputs.html_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The plugin ZIP has been attached to the release." >> $GITHUB_STEP_SUMMARY

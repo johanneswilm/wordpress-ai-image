@@ -128,6 +128,24 @@ make translations
 make dev-install WP_PATH=/path/to/wordpress
 ```
 
+### Automatic Builds (GitHub Actions)
+
+When you push a tag, GitHub Actions automatically:
+- Compiles translations
+- Creates plugin ZIP
+- Creates GitHub release
+- Attaches ZIP to release
+
+```bash
+# Create a release
+git tag v1.0.1
+git push origin v1.0.1
+
+# GitHub Actions will automatically build and release!
+```
+
+See `.github/workflows/README.md` for details.
+
 ### Manual Build
 
 If you prefer to build manually:
